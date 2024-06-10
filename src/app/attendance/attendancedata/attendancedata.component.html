@@ -49,14 +49,16 @@
                                 <div class="col-lg-2 pt-2" [hidden]="this.grpname.includes('LM') && !this.grpname.includes('HR')">
                                         <h6 class="fs-12 font-type"><span>Company</span></h6>
                                         <select class="form-select font-type fs-11" #selectedCompany (change)="onCompanySelected(selectedCompany.value)" aria-label="Default select example" required>
-                                            <option value="-1" selected>All</option>
+                                            <option value="0" selected disabled>Select</option>
+                                            <option value="-1" >All</option>
                                             <option *ngFor="let combo of companydata" [value]="combo.KEY_ID">{{ combo.DATA_VALUE }}</option>
                                         </select>     
                                 </div>
                                 <div class="col-lg-2 pt-2" [hidden]="this.grpname.includes('LM')  && !this.grpname.includes('HR')">
                                         <h6 class="font-type fs-12"><span>Department </span></h6>
                                         <select class="form-select font-type fs-11" #selectedDept (change)="onDeptSelected(selectedDept.value)" aria-label="Default select example" required>
-                                            <option value="-1" selected>All</option>
+                                            <option value="0" selected disabled>Select</option>
+                                            <option value="-1" >All</option>
                                             <option *ngFor="let combo of deptdata" [value]="combo.KEY_ID">{{ combo.DATA_VALUE }}</option>
                                         </select>  
                                  
@@ -64,14 +66,16 @@
                                 <div class="col-lg-2 pt-2">  
                                         <h6 class="font-type fs-12"><span>Employee Name </span></h6>
                                         <select class="form-select font-type fs-11" #selectedEmp (change)="onEmpSelected(selectedEmp.value)" aria-label="Default select example" required>
-                                            <option value="-1" selected>All</option>
+                                            <option value="0" selected disabled>Select</option>
+                                            <option value="-1" >All</option>
                                             <option *ngFor="let combo of empdata" [value]="combo.EMP_CODE">{{ combo.EMP_CODE }}-{{combo.EMP_NAME}}</option>
                                         </select>                      
                                 </div>
                                 <div class="col-lg-2 pt-2">  
                                         <h6 class=" font-type fs-12"><span>Status </span></h6>
                                         <select class="form-select font-type fs-11" #selectedstat (change)="onStatSelected(selectedstat.value)" aria-label="Default select example" required>
-                                            <option value="-1" selected>All</option>
+                                            <option value="0" selected disabled>Select</option>
+                                            <option value="-1" >All</option>
                                             <option *ngFor="let combo of statusdata"  [value]="combo.KEY_ID">{{ combo.DATA_VALUE }}</option>
                                     </select>       
                                 </div>

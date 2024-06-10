@@ -12,14 +12,14 @@ export class ApiCallService {
  //Emisoft test cloud
 //public dotnetapi = 'http://15.206.239.91:83/api';
 //Emisoft cloud for customer testing
- //public dotnetapi = 'http://3.111.100.109:81/api';
+public dotnetapi = 'http://3.111.100.109:81/api';
 //Local host
 //public dotnetapi = 'https://localhost:44381/api';
 //Live server for Customer intranet
 //public dotnetapi = 'http://192.168.10.29:81/api';
 //public hostname='localhost:44381';
 //Live server for Customer Cloud 
-  public dotnetapi = 'http://72.167.151.157:81/api';
+ //public dotnetapi = 'http://72.167.151.157:81/api';
   // Emisoft common
  //public dotnetapi = 'http://192.168.1.45:85/api';
 
@@ -1231,14 +1231,14 @@ UploadAirticket(data:any)
 {
   return this.http.post<any>(`${this.dotnetapi}/LeaveManagement/UpdateAirTicket_DocUpload`,data);
 }
-ViewAirticket(activereqid:any)
+ViewAirticket(activereqid:any,flag:any)
 {
-  let urls=`${this.dotnetapi}/File/GetAirticket/${activereqid}`;
+  let urls=`${this.dotnetapi}/File/GetAirticket/${activereqid}/${flag}`;
    return urls;
 }
-AirTicketDocUpload(data:any,reqid:any)
+AirTicketDocUpload(data:any,reqid:any,flag:any)
 {
-  return this.http.post<any>(`${this.dotnetapi}/File/AirTicketDocUpload/${reqid}`,data);
+  return this.http.post<any>(`${this.dotnetapi}/File/AirTicketDocUpload/${reqid}/${flag}`,data);
 }
 
 listContractor(contractorid:any)
@@ -2393,5 +2393,52 @@ Fetch_OffboardingReq_HR(empcode:any,reqstatus:any,year:any,company:any)
   // alert(year)
   // alert(empcode)
   return this.http.get<any>(`${this.dotnetapi}/OffBoarding/Fetch_OffboardingReq_HR/${empcode}/${reqstatus}/${year}/${company}`);
+}
+Fetch_Employment_Cert_Template(empcode:any,reqid:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/Employment_Cert_Template/${empcode}/${reqid}`);
+}
+//Salary_Transfer_Cert_Template
+Fetch_Salary_Transfer_Cert_Template(empcode:any,reqid:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/Salary_Transfer_Cert_Template/${empcode}/${reqid}`);  
+}
+Fetch_Salary_Cert_Template(empcode:any,reqid:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/Salary_Cert_Template/${empcode}/${reqid}`);  
+}
+
+//Family Airticket 
+FetchFamilyAirTicketDetails(flag:any,status:any,year:any,type:any,user:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/FetchFamilyAirTicketDetails/${flag}/${status}/${year}/${type}/${user}`);
+}
+ViewFamilyAirTicketDetails(reqid:any,empcode:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/ViewFamilyAirTicketDetails/${reqid}/${empcode}`);
+}
+AddFamilyAirticketDetails(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/EmployeeManagement/AddFamilyAirticketDetails`,data);
+}
+CancelFamilyTicketRequest(reqid:any,empcode:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/CancelFamilyTicketRequest/${reqid}/${empcode}`);
+}
+ApproveFamilyAirticketDetails(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/EmployeeManagement/ApproveFamilyAirticketDetails`,data);
+}
+RemoveMembersFamilyAirTicket(reqid:any,memberID:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/RemoveMembersFamilyAirTicket/${reqid}/${memberID}`);
+}
+FamilyAirTicketAccess(empcode:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/FamilyAirTicketAccess/${empcode}`);
+}
+fetch_Grievance_Report(empcode:any,reqstatus:any,year:any,company:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/ReportDashboard/GrievanceLog_Report/${empcode}/${reqstatus}/${year}/${company}`);
 }
 }

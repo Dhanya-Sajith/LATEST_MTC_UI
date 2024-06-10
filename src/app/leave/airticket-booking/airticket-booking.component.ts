@@ -50,6 +50,9 @@ export class AirticketApproveComponent implements OnInit {
   sdate = new FormControl();
   edate = new FormControl();  
   desiredPage: any; 
+  Activereqid: any;
+  passengerslist: any;
+  activeflag: any;
 
   constructor(private apicall:ApiCallService, private datePipe: DatePipe,private fb:FormBuilder,private session:LoginService) {
     this.EditForm = this.fb.group({
@@ -134,13 +137,15 @@ export class AirticketApproveComponent implements OnInit {
     })
   }
 
-  ActivereqID(reqid:any){
+  ActivereqID(reqid:any,flag:any){
     this.activereqid = reqid;
+    this.activeflag = flag;
   }
 
-  Editempcode(emp_code:any,req_id:any,document:any,cost:any){
+  Editempcode(emp_code:any,req_id:any,document:any,cost:any,flag:any){
     this.emp_code = emp_code;
     this.activereqid = req_id;
+    this.activeflag = flag;
     this.costControl.setValue(cost);
     this.DocControl.setValue(document);
     // this.EditForm.controls['AirticketDocControl'].setValue(document);
@@ -165,7 +170,8 @@ export class AirticketApproveComponent implements OnInit {
         empcode : this.emp_code,
         verified_by : this.empcode,
         cost: cost,
-        upfile : docname
+        upfile : docname,
+        mflag:this.activeflag
        };
        this.apicall.UploadAirticket(data).subscribe(res=>{
        if(res.Errorid = 1)
@@ -186,7 +192,7 @@ export class AirticketApproveComponent implements OnInit {
     if (input.files && input.files[0]) {
       const fdata = new FormData();
       fdata.append('filesup',input.files[0]);
-      this.apicall.AirTicketDocUpload(fdata,this.activereqid).subscribe((res)=>{
+      this.apicall.AirTicketDocUpload(fdata,this.activereqid,this.activeflag).subscribe((res)=>{
         if(res>=0)
         {
         
@@ -199,6 +205,7 @@ export class AirticketApproveComponent implements OnInit {
           this.showModal = 2;
           this.failed = "Uploading failed!";      
         }
+        this.EditForm.reset(); 
       })
     }
   }
@@ -214,7 +221,7 @@ export class AirticketApproveComponent implements OnInit {
   }
 
   download_documents(){
-    let fileurl=this.apicall.ViewAirticket(this.activereqid);
+    let fileurl=this.apicall.ViewAirticket(this.activereqid,this.activeflag);
     let link = document.createElement("a");
       
        if (link.download !== undefined) {
@@ -334,6 +341,14 @@ getEntriesEnd(): number {
   );
   const end = this.currentPage * this.itemsPerPage;
   return Math.min(end, filteredData.length);
+}
+
+passengerdetails(reqid:any,empcode:any,flag:any)
+{
+  this.Activereqid = reqid;
+  this.apicall.ViewFamilyAirTicketDetails(reqid,empcode).subscribe(res => {
+    this.passengerslist = res;
+  })
 }
 
 }

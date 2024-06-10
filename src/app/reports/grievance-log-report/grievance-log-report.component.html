@@ -40,7 +40,7 @@
                                                      <div class="col-md-3">
                                                         <h3 class="font-type fs-12"><span>Company</span></h3>
                                                         <div>
-                                                            <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="companycode"  name="comcode" id="comcode" (change)="fetch_tr_sts_reportfilter()">
+                                                            <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="companycode"  name="comcode" id="comcode" (change)="fetch_griev_reportfilter()">
                                                                 <option value="-1" selected disabled>Select</option>
                                                                 <option  *ngFor="let item of company" value="{{item.KEY_ID}}">
                                                                     {{item.DATA_VALUE}}
@@ -51,7 +51,7 @@
                                                       
                                                     <div class="col-md-3">
                                                         <h3 class="font-type fs-12"><span>Year</span></h3>
-                                                        <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="year" (change)="onYearSelected()" name="year" id="year" (change)="fetch_tr_sts_reportfilter()">                                                            
+                                                        <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="year" (change)="onYearSelected()" name="year" id="year" (change)="fetch_griev_reportfilter()">                                                            
                                                             <option value="-1" selected disabled>Select</option>
                                                             <option  *ngFor="let item of yearlist" value="{{item.DISPLAY_FIELD}}">
                                                                 {{item.DISPLAY_FIELD}}
@@ -60,7 +60,7 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <h3 class="font-type fs-12"><span>Status</span></h3>
-                                                        <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="statusval" name="statusval" id="statusval" (change)="fetch_tr_sts_reportfilter()">                                                            
+                                                        <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="statusval" name="statusval" id="statusval" (change)="fetch_griev_reportfilter()">                                                            
                                                             <option value ="-1" selected disabled>Select</option>
                                                             <option  *ngFor="let trainingsts of liststatus" value="{{trainingsts.KEY_ID}}" >
                                                                 {{trainingsts.DATA_VALUE}}
@@ -69,39 +69,6 @@
                                                     </div>
                                                     <!--end col-->
 
-                                                    <!-- <div class="col-lg-3 col-sm-6">
-                                                        <h3 class="font-type fs-12"><span>Status</span></h3>
-                                                        <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="status"  name="status" id="status">                                                            
-                                                            <option value="-1" selected disabled>Select</option>
-                                                            <option  *ngFor="let item of yearlist" value="{{item.DISPLAY_FIELD}}">
-                                                                {{item.DISPLAY_FIELD}}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-3 col-sm-6">
-                                                        <div>
-                                                            <h3 class="font-type fs-12"><span>Status</span></h3>
-                                                            <select class="form-select font-type fs-11" aria-label="Default select example" [(ngModel)]="status" name="status" id="status">                                                            
-                                                                <option value ="-1">Select Status</option>
-                                                                <option  *ngFor="let trainingsts of liststatus" value="{{trainingsts.KEY_ID}}" >
-                                                                    {{trainingsts.DATA_VALUE}}
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div> -->
-                                                    <!--end col-->
-                                                    
-                                                    <!-- <div class="col-lg-2 col-sm-6" >
-                                                        <label></label>
-                                                        <div>
-                                                            <button type="submit" style="margin-top: 4px!important;" class="btn btn-orange font-type fs-12 add-button text-white" (click)="filter()"> <i class="ri-file-text-line"></i>
-                                                                View Report
-                                                            </button>
-                                                        </div>
-                                                    </div> -->
-                                                    <!--end col-->
-                                                  
-                                                    <!--end col-->
                                                 </div>
         
                                               
@@ -154,27 +121,34 @@
                                                 <div class="card-body">
                                                     <div class="table-responsive">
                                                         <table class="table table-bordered table-nowrap align-middle mb-0"  style="padding-top:0px" >
-                                                            <thead>                                                               
+                                                            <thead>   
+                                                                <!-- Grievence Id, Reported date, Emp Name , EMp id , Issue,  Resolution, status, Resolved date, Resolved by (empid)                                                             -->
                                                                 <tr class="table-light text-white font-type">
-                                                                    <th scope="col" style="text-align: center;">EmpCode </th>                                                                    
-                                                                    <th scope="col" style="text-align: center;">Trainee Name </th>
-                                                                    <th scope="col" style="text-align: center;">Date of Joining </th>
-                                                                    <th scope="col" style="text-align: center;">Training Course </th>
-                                                                    <th scope="col" style="text-align: center;">Date of training </th>
-                                                                    <th scope="col" style="text-align: center;">Duration </th>
-                                                                    <th scope="col" style="text-align: center;">Training Status</th>
+                                                                    <th scope="col" style="text-align: center;">Grievence Id </th>  
+                                                                    <th scope="col" style="text-align: center;">EmpCode </th>  
+                                                                    <th scope="col" style="text-align: center;">Emp Name</th>                                                                   
+                                                                    <th scope="col" style="text-align: center;">Reported Date  </th>
+                                                                    <th scope="col" style="text-align: center;">Issue </th>
+                                                                    <th scope="col" style="text-align: center;">Resolution</th>
+                                                                    <th scope="col" style="text-align: center;">status </th>
+                                                                    <th scope="col" style="text-align: center;">Resolved date </th>
+                                                                    <th scope="col" style="text-align: center;">Resolved by</th>
                                                                 </tr>
                                                             </thead>
                 
                                                             <tbody class="list form-check-all font-type fs-11">
-                                                                <tr class="trstyle fs-11" *ngFor="let data of tr_report | search : searchInput  | pagination: currentPage: itemsPerPage;index as i">
-                                                                    <td>{{data.EMP_CODE}}</td>                                                                    
+                                                                <tr class="trstyle fs-11" *ngFor="let data of griev_report | search : searchInput  | pagination: currentPage: itemsPerPage;index as i">
+                                                                    <!-- REQUEST_ID,EMP_CODE,EMP_NAME,REQUEST_DATE,DESCRIPTION,CLOSURE_COMMENT,CLOSURE_DATE,CLOSURE_BY,REQ_STATUS,STATUS_VAL -->
+                                                                    <td>{{data.REQUEST_ID}}</td> 
+                                                                    <td>{{data.EMP_CODE}}</td>                                                                   
                                                                     <td>{{data.EMP_NAME}}</td>
-                                                                    <td>{{data.EXPIRY_DATE | date: 'dd-MM-yyyy'}}</td>
-                                                                    <td>{{data.SUBJECT_NAME}}</td>
-                                                                    <td>{{data.SCHEDULED_DATE | date: 'dd-MM-yyyy'}}</td>
-                                                                    <td>{{data.REMARKS}}</td>
-                                                                    <td>{{data.PLAN_STATUS_VAL}}</td>
+                                                                    <td>{{data.REQUEST_DATE| date: 'dd-MM-yyyy'}}</td>
+                                                                    <td>{{data.DESCRIPTION}}</td>
+                                                                    <td>{{data.CLOSURE_COMMENT}}</td>
+                                                                    <td>{{data.STATUS_VAL}}</td>
+                                                                    <td>{{data.CLOSURE_DATE| date: 'dd-MM-yyyy'}}</td>
+                                                                    <td>{{data.CLOSURE_BY}}</td>
+                                                                    
                                                                 </tr>                                                                
                                  
                                                             </tbody>                                   
@@ -183,7 +157,8 @@
                                                        
                                                      
                                                     </div><!-- end table responsive -->
-                                                    <div *ngIf="salarydata">                                            
+                                                   
+                                                    <div *ngIf="griev_report">                                            
                                 
                                                         <div class="align-items-center justify-content-between row text-center text-sm-start" *ngIf="totalSearchResults>0">
                                                             <div class="col-sm">

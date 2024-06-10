@@ -6,7 +6,7 @@ import { JsonPipe, formatDate } from '@angular/common';
 import { FormControl,FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { DatePipe } from '@angular/common';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-training-plan',
@@ -66,7 +66,7 @@ export class TrainingPlanComponent implements OnInit {
   trainingpurpose: any;
   Trainingskills: any;
 
-  constructor(private datePipe: DatePipe,private session:LoginService,private apicall:ApiCallService,private router:Router,private fb: FormBuilder) { 
+  constructor(private datePipe: DatePipe,private session:LoginService,private apicall:ApiCallService,private router:Router,private fb: FormBuilder,private route: ActivatedRoute) { 
 
     this.dropdownSettings = {
       idField: 'EMP_CODE',
@@ -90,6 +90,22 @@ export class TrainingPlanComponent implements OnInit {
   }  
 
   ngOnInit(): void {
+
+  this.route.queryParams
+    .subscribe(params => {
+      this.user = params['user'];
+    }
+  );
+
+  if(this.user == 'personal' || this.user == undefined){
+    this.user = 'personal';
+  }
+  else{
+    this.user = 'team';
+    this.Listscheduledtrainingplans();
+    this.fetchallEmp();
+    this.listProvidername();
+  }
 
    this.listYear();
    this.ListStatus();
@@ -866,7 +882,7 @@ addEmployee(selectedItems:any,num:any) {
        competencyID:this.selectedskill
      }
    }
-   alert(JSON.stringify(this.editSchedule))
+  //  alert(JSON.stringify(this.editSchedule))
    this.apicall.editscheduledData(this.editSchedule).subscribe((res) => {
      this.editscheduledplan(trainingId);
    })

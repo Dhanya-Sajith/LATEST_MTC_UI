@@ -127,13 +127,13 @@ export class AttendancedataComponent implements OnInit {
     //Dates 
     this.apicall.listFromToDates().subscribe((res) => {
       this.date=res[0]; 
-      this.fromdate=this.datepipe.transform(this.date.FROM_DATE, "yyyy-MM-dd");
+      // this.fromdate=this.datepipe.transform(this.date.FROM_DATE, "yyyy-MM-dd");
         //alert(JSON.stringify(this.fromdate))
-      this.todate=this.datepipe.transform(this.date.TO_DATE, "yyyy-MM-dd");
+      // this.todate=this.datepipe.transform(this.date.TO_DATE, "yyyy-MM-dd");
       this.pfromdate=this.datepipe.transform(this.date.FROM_DATE, "yyyy-MM-dd");
         //alert(JSON.stringify(this.fromdate))
       this.ptodate=this.datepipe.transform(this.date.TO_DATE, "yyyy-MM-dd");
-      this.FetchAttendanceData();
+      // this.FetchAttendanceData();
       this.FetchAttendanceDataPersonal();
     });
     this.currentPage = 1; 

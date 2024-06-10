@@ -166,6 +166,7 @@
                                 <table class="table table-bordered table-nowrap align-middle">
                                     <thead>
                                         <tr>
+                                        <th scope="col" class="text-center">Employee Code</th>
                                         <th scope="col" class="text-center">Employee Name</th>
                                         <th *ngFor="let item of weekdays">
                                             <div class="d-flex justify-content-center align-items-center mb-0">
@@ -182,6 +183,7 @@
                                     </thead>
                                     <tbody *ngFor="let employee of listshiftdetails | search : searchInput | pagination: currentPage: itemsPerPage">
                                         <tr>
+                                            <td>{{employee.EMP_CODE}}</td>
                                             <td>{{employee.EMP_NAME}}</td>
                                             <td *ngFor="let workday of employee.workdays" style="padding:2px;">
                                                 <div class="card-box bg-info-subtle" *ngIf="workday.SHIFT_ID == 1 || workday.SHIFT_ID == 5 || workday.SHIFT_ID == 7 || workday.SHIFT_ID == 11" [hidden]="workday.SHIFT_ID == '-2' || workday.SHIFT_ID == '0'">

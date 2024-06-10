@@ -174,7 +174,7 @@
                                                 <tr class="font-type" *ngFor="let data of listdetails">
                                                     <td class="fw-semibold">{{data.EMP_CODE}}</td>
                                                     <td>{{data.EMP_NAME}}</td>
-                                                    <td style="white-space: pre-wrap;">{{data.EMP_CODE}}</td>
+                                                    <td style="white-space: pre-wrap;">{{data.PURPOSE}}</td>
                                                     <td>{{data.TARGET_DATE | date:"MMM dd,yyyy"}}</td>
                                                     <td class="status"><span [ngStyle]="getStatusStyles(data.REQUEST_STATUS)" class="badge text-white width-budge fs-11">{{data.REQUEST_STATUS_VAL}}</span></td>
                                                     <td>

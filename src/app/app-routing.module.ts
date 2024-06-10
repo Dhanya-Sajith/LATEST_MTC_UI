@@ -119,6 +119,11 @@ import { ResignationRequestComponent } from './OffBoarding/resignation-request/r
 import { ResignationApprovalComponent } from './OffBoarding/resignation-approval/resignation-approval.component';
 import { ResignationApprovalHRComponent } from './OffBoarding/resignation-approval-hr/resignation-approval-hr.component';
 import { ExperienceLetterComponent } from './OffBoarding/experience-letter/experience-letter.component';
+import { EmploymentCertificateComponent } from './ServiceRequests/employment-certificate/employment-certificate.component';
+import { SalaryCertificateComponent } from './ServiceRequests/salary-certificate/salary-certificate.component';
+import { SalaryTransferCertificateComponent } from './ServiceRequests/salary-transfer-certificate/salary-transfer-certificate.component';
+import { FamilyAirticketComponent } from './ServiceRequests/family-airticket/family-airticket.component';
+import { GrievanceLogReportComponent } from './reports/grievance-log-report/grievance-log-report.component';
 
 
 
@@ -247,6 +252,11 @@ const routes: Routes = [
   {path:'resignationApproval' , component:ResignationApprovalComponent},
   {path:'ExperienceLetter' , component:ExperienceLetterComponent},
   {path:'ResignationApprovalHR' , component:ResignationApprovalHRComponent},
+  {path:'employment-certificate' , component:EmploymentCertificateComponent},
+  {path:'salary-transfer-cerificate' , component:SalaryTransferCertificateComponent},
+  {path:'salary-cerificate' , component: SalaryCertificateComponent},
+  {path:'family_airticket', component:FamilyAirticketComponent},
+  {path:'grievance-log-report' , component:GrievanceLogReportComponent},
 ];
 
 @NgModule({

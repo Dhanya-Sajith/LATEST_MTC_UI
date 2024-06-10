@@ -156,11 +156,18 @@
                                         <td>{{AirticketList.STATUS_VAL}}</td>
                                         <td>{{AirticketList.START_DATE | date:"dd-MM-yyyy"}}</td>
                                         <td>{{AirticketList.END_DATE | date:"dd-MM-yyyy"}}</td>
-                                        <td>Self</td>
+                                        <td>
+                                            <ng-container *ngIf="AirticketList.REASON =='L'">
+                                                Self
+                                            </ng-container>
+                                            <ng-container *ngIf="AirticketList.REASON == 'F'">
+                                                <a href="#DetailsModal" data-bs-toggle="modal" class="bar-text d-inline-block edit-item-btn"  style="text-decoration: underline;" (click)="passengerdetails(AirticketList.REQ_ID,AirticketList.EMP_CODE,1)"> Family</a>
+                                            </ng-container>
+                                        </td>
                                         <td>{{AirticketList.COST}}</td>
                                         <td id="td-ViewDocModal">
                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" [hidden]="AirticketList.DOCUMENT ==''">
-                                                <a href="#ViewDocModal" data-bs-toggle="modal" class="bar-text d-inline-block edit-item-btn" (click)="ActivereqID(AirticketList.REQ_ID)">
+                                                <a href="#ViewDocModal" data-bs-toggle="modal" class="bar-text d-inline-block edit-item-btn" (click)="ActivereqID(AirticketList.REQ_ID,AirticketList.REASON)">
                                                 <i class="ri-eye-line"></i>
                                                 </a>
                                             </li>
@@ -168,7 +175,7 @@
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Upload">
-                                                   <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" id="buttonApprove" href="#UploadModal"  (click)="Editempcode(AirticketList.EMP_CODE,AirticketList.REQ_ID,AirticketList.DOCUMENT,AirticketList.COST)"><i class="fa fas fa-upload fs-16"></i></button>
+                                                   <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" id="buttonApprove" href="#UploadModal"  (click)="Editempcode(AirticketList.EMP_CODE,AirticketList.REQ_ID,AirticketList.DOCUMENT,AirticketList.COST,AirticketList.REASON)"><i class="fa fas fa-upload fs-16"></i></button>
                                                 </li>
                                             </ul>
                                         </td>
@@ -308,6 +315,44 @@
                 </div>
             </div>
             <!--End Edit Model-->
+
+             <!--Passenger Details Model Team-->
+             <div class="modal fade zoomIn" id="DetailsModal" tabindex="-1" aria-labelledby="DetailsModal" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-white padding-up-5">
+                            <button type="button" class="btn-close" id="deleteRecord-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
+                        </div>
+                        <form class="tablelist-form" autocomplete="off">
+                            <div class="modal-body ">
+                                <input type="hidden" id="id-field" />
+                                <div class="mb-1">
+                                    <div class="card-body">
+                                        <div class="table-responsive table-card">
+                                            <table class="table table-nowrap align-middle table-bordered border-orange">
+                                                <thead class="table-light text-white font-type">
+                                                <tr>
+                                                    <th>Passengers</th>
+                                                    <th>Age</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="list form-check-all font-type fs-11">
+                                            <tr class="font-type" *ngFor="let passengerdata of passengerslist">
+                                                <th>{{passengerdata.MEMBER_NAME}}</th>
+                                                <td>{{passengerdata.MEMBER_DOB | date:'dd-MM-yyyy'}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--Passenger Details Model Team-->
+            
             <button id="openModalButton" [hidden]="true" data-bs-toggle="modal" data-bs-target="#SuccessRecordModal">Open Modal</button> 
             <!--Modal For Success Message Start-->
             <div class="modal fade zoomIn" id="SuccessRecordModal" tabindex="-1" aria-labelledby="deleteRecordLabel" aria-hidden="true">

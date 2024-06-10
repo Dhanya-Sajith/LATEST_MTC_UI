@@ -4,6 +4,7 @@ import { LoginService } from 'src/app/login.service';
 import { DatePipe} from '@angular/common';
 import { FormControl,FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-training-requests',
@@ -66,7 +67,7 @@ export class TrainingRequestsComponent implements OnInit {
   viewdtl: any;
   BtnActive: any;
 
-  constructor(private apicall:ApiCallService,private datePipe:DatePipe,private session:LoginService,private fb: FormBuilder) { 
+  constructor(private apicall:ApiCallService,private datePipe:DatePipe,private session:LoginService,private fb: FormBuilder,private route: ActivatedRoute) { 
     this.requestForm = this.fb.group({
       trainingname: ['', Validators.required],
       schedule: ['', Validators.required],
@@ -89,6 +90,23 @@ export class TrainingRequestsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams
+    .subscribe(params => {
+      this.user = params['user'];
+    }
+    );
+    
+    if(this.user == 'personal' || this.user == undefined){
+      this.user = 'personal';
+      this.viewflag = 0; 
+      this.FetchTrainingRequest();
+    }
+    else{
+      this.user = 'team';
+      this.viewflag = 1;   
+      this.FetchTrainingRequest_HOD();  
+    }
+
     this.ListYear();
     this.apicall.listRegStatus(16).subscribe(res =>{
       this.listQuarter = res;

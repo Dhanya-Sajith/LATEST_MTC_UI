@@ -347,7 +347,7 @@ export class EvaluationByHRComponent implements OnInit {
         Purpose:purpose
       }
 
-      alert(JSON.stringify(data))
+      // alert(JSON.stringify(data))
 
       this.general.setEmpdetails_competency(data); 
       this.router.navigate(['/CompetencyAssessmentresultbyHR']);

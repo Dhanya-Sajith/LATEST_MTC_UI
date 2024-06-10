@@ -1141,7 +1141,7 @@ export class LeavemanagementComponent implements OnInit {
  }
 
  download_airticket(){
-  let fileurl=this.apicall.ViewAirticket(this.activereqid);
+  let fileurl=this.apicall.ViewAirticket(this.activereqid,'L');
   let link = document.createElement("a");
     
      if (link.download !== undefined) {

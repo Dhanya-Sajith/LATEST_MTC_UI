@@ -32,7 +32,7 @@ export class LoanManagementComponent implements OnInit {
   fromdate: any;
   todate: any;
   selectedEmp: any = -1;
-  selectedStatus: any;
+  selectedStatus: any = -1;
   listLoanRequest: any;
   Date = new Date();
   firstDay1 = new Date(this.Date.getFullYear(), this.Date.getMonth(), 1);
