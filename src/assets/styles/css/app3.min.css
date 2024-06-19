@@ -18457,3 +18457,7 @@ text-transform: uppercase;
 .border-black{
     border-color:black;
 }
+.img-size-cert{
+    width:220px;
+    height:130px;
+}

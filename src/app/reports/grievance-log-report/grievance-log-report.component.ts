@@ -144,11 +144,11 @@ download_to_excel()
           GrievenceId: data.REQUEST_ID ,
           EmployeeCode: data.EMP_CODE ,
           EmployeeName: data.EMP_NAME,
-          ReportedDate: this.datePipe.transform(data.REQUEST_DATE, "yyyy-MM-dd") ,
+          ReportedDate: this.datePipe.transform(data.REQUEST_DATE, "dd-MM-yyyy") ,
           Issue : data.DESCRIPTION, 
           Resolution : data.CLOSURE_COMMENT,
           status :  data.STATUS_VAL,     
-          ResolvedDate: this.datePipe.transform(data.CLOSURE_DATE, "yyyy-MM-dd") ,
+          ResolvedDate: this.datePipe.transform(data.CLOSURE_DATE, "dd-MM-yyyy") ,
           Resolvedby: data.CLOSURE_BY,          
         };
   

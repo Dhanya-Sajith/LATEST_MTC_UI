@@ -13,6 +13,10 @@ export class ResignationApprovalHRComponent implements OnInit {
 
   userSession:any = this.session.getUserSession();
   empcode: any=this.userSession.empcode;
+  grpname:any=this.userSession.grpname;
+  desig:any=this.userSession.desig.split('#', 1);
+  desigID:any= this.desig[1]; 
+  
   AddReqForm: FormGroup;
   companydata: any;
   selectedCompanyid: any=-1;
@@ -45,6 +49,26 @@ rejectReason: any;
   itemsPerPage=10;
   currentPage=1;
   desiredPage: any; 
+
+  //EOS
+  Eoscompany:any = -1;
+  Eosstatus:any = -1;
+  Eosyear:any = -1;
+  Eoslist: any;
+  liststatus: any;
+  paymentmode:any = -1;
+  clearancelist: any;
+  clearence_remarks:any
+  accclear: boolean = false;
+  activeempcd: any;
+  remark: any;
+  RECORDID: any;
+  selectedcategory: any;
+  paymentdt:any;
+  fetchedData: any;
+  sanitizer: any;
+  activereqid: any;
+  EOSreason:any
   
 
   constructor(private apicall:ApiCallService,private session:LoginService,private formBuilder: FormBuilder,private datePipe: DatePipe) { 
@@ -79,6 +103,10 @@ rejectReason: any;
     })
 
     this.filter(); 
+    //Eos
+    this.apicall.listRegStatus(46).subscribe(res =>{
+      this.liststatus = res;
+    })
   }
   onCompanySelected(selectedCompanyid: any) { 
     this.selectedCompanyid=selectedCompanyid;    
@@ -346,4 +374,190 @@ rejectReason: any;
       const end = this.currentPage * this.itemsPerPage;
       return Math.min(end, filteredData.length);
     }
+
+    //EOS
+  FetchProcessList()
+  {
+    this.apicall.Fetch_EOSProcessList(this.empcode,this.Eoscompany,this.Eosyear,this.Eosstatus).subscribe((res)=>{
+      this.Eoslist=res;
+    })
+  }
+
+  EOSprocessing(REQUEST_ID:any,EMP_CODE:any)
+  {
+    const data = {
+      empcode:EMP_CODE,
+      user:this.empcode,
+      reqid:REQUEST_ID
+    };
+    this.apicall.EOS_Processing(data).subscribe((res)=>{
+      if(res.Errorid>0)
+        {
+          this.showModal = 1; 
+          this.success = "Processing Completed";
+          this.FetchProcessList();
+        }
+        else
+        {
+          this.apicall.FetchEOSDataofEmployee(EMP_CODE).subscribe((res)=>{
+            this.fetchedData = res
+            this.showModal = 3;
+            this.failed = "Please, Re-Run the checklist";
+          })
+
+        }   
+    })
+  } 
+
+  clearance(EMP_CODE:any,category:any,catvalue:any)
+  {
+    this.remark = undefined
+    this.RECORDID = undefined
+    this.selectedcategory = catvalue;
+    if(category == 1 || category == 2){
+      this.apicall.Fetch_AssetDetails_Emp(EMP_CODE,category).subscribe((res)=>{
+        this.clearancelist=res;
+        this.remark = this.clearancelist[0].CATEGORYNM;
+        this.RECORDID = this.clearancelist[0].RECORDID;
+      })
+    }else{
+      this.apicall.Fetch_Resignation_AccountsDtl(EMP_CODE).subscribe((res)=>{
+        this.clearancelist=res;
+        this.remark = this.clearancelist[0].REMARKS;
+        this.RECORDID = this.clearancelist[0].CLEAR_STATUS;
+      })
+    }
+  }
+
+  ActiveId(empcd:any,reqid:any){
+    this.activeempcd = empcd;
+    this.activereqid = reqid;
+  }
+
+  Accountsclearence()
+  {
+    if(this.accclear == false || this.clearence_remarks == undefined)
+    {
+      this.showModal = 2;
+      this.failed = "Please, Fill the fields.";
+    }else
+    {
+      const data = {
+        empcode:this.activeempcd,
+        updatedby:this.empcode,
+        remarks:this.clearence_remarks,
+        completed_flag:1       
+      };
+      this.apicall.Add_AccountsClearance(data).subscribe((res)=>{
+        if(res.Errorid>0)
+          {
+            this.showModal = 1; 
+            this.success = "Updated Successfully";
+            this.FetchProcessList();
+          }
+          else
+          {
+            this.showModal = 2;
+            this.failed = "Failed";
+          }   
+      })
+    }
+  }
+
+  ClearAccountclearence()
+  {
+    this.clearence_remarks = '';
+    this.accclear = false;
+  }
+
+  Accounts_Payment()
+  {
+    if(this.paymentmode == -1 || this.paymentdt == undefined)
+      {
+        this.showModal = 2;
+        this.failed = "Please, Fill the fields.";
+      }else
+      {
+      const data = {
+        empcode:this.activeempcd,
+        reqID:this.activereqid,
+        status:5,
+        updated_by:this.empcode,  
+        reject_reason:null,       
+        payment_date:this.paymentdt,
+        payment_mode:this.paymentmode 
+      };
+      this.apicall.EOS_SalaryApprovalReject(data).subscribe((res)=>{
+        if(res.Errorid>0)
+          {
+            this.showModal = 1; 
+            this.success = "Updated Successfully";
+            this.FetchProcessList();
+          }
+          else
+          {
+            this.showModal = 2;
+            this.failed = "Failed";
+          }   
+      })
+    }
+  }
+
+  ClearPayment()
+  {
+    this.paymentmode = -1;
+    this.paymentdt = '';
+  }
+
+  VPApprove(reid:any,ecode:any)
+  {
+    const data = {
+      empcode:ecode,
+      reqID:reid,
+      status:4,
+      updated_by:this.empcode, 
+      reject_reason:null,     
+      payment_date:null,
+      payment_mode:null 
+    };
+    this.apicall.EOS_SalaryApprovalReject(data).subscribe((res)=>{
+      if(res.Errorid>0)
+        {
+          this.showModal = 1; 
+          this.success = "Approved Successfully";
+          this.FetchProcessList();
+        }
+        else
+        {
+          this.showModal = 2;
+          this.failed = "Failed";
+        }   
+    })
+  }
+
+  VPReject()
+  {
+    const data = {
+      empcode:this.activeempcd,
+      reqID:this.activereqid,
+      status:3,
+      updated_by:this.empcode,   
+      reject_reason:this.EOSreason,   
+      payment_date:null,
+      payment_mode:null 
+    };
+    this.apicall.EOS_SalaryApprovalReject(data).subscribe((res)=>{
+      if(res.Errorid>0)
+        {
+          this.showModal = 1; 
+          this.success = "Request Rejected";
+          this.FetchProcessList();
+        }
+        else
+        {
+          this.showModal = 2;
+          this.failed = "Failed";
+        }   
+    })
+  }
 }

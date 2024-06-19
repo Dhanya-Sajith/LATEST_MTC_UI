@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ApiCallService } from 'src/app/api-call.service';
 import { LoginService } from 'src/app/login.service';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { GeneralService } from 'src/app/general.service';
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'app-document-request',
@@ -56,6 +57,7 @@ export class DocumentRequestComponent implements OnInit {
   showSalarycert: boolean=false;
   address: any;
   validationremarksAdd: any;
+  Status: any;
 
   constructor(private apicall:ApiCallService,private session:LoginService,private datepipe:DatePipe,private route: ActivatedRoute,private general:GeneralService,private router:Router) { }
 
@@ -64,8 +66,18 @@ export class DocumentRequestComponent implements OnInit {
     this.route.queryParams
       .subscribe(params => {
         this.user = params['user'];
+        this.Status=params['Status'];
+        if(this.user=='team' && this.Status){
+          this.selectedStatus=params['Status'];
+        }else if(this.user=='personal' && this.Status){
+          this.selectedStatusPersonal=params['Status'];
+        }else{
+          this.selectedStatusPersonal=1;
+        }
+       
       }
     );
+    
 
     if( this.user == 'personal' || this.user == undefined){
       this.user = 'personal'
@@ -217,12 +229,25 @@ export class DocumentRequestComponent implements OnInit {
       empcode:item.EMP_CODE    
     }
     this.general.setEmpdetails_competency(data); 
-  if(item.DOC_TYPE_ID==1){  
-    this.router.navigate(['/salary-cerificate']);
+  if(item.DOC_TYPE_ID==1){ 
+    if(this.user=='team'){
+      this.router.navigate(['/salary-cerificate'], { queryParams: { user: this.user,Status:this.selectedStatus } });
+    } else{
+      this.router.navigate(['/salary-cerificate'], { queryParams: { user: this.user,Status:this.selectedStatusPersonal } });
+    }
+   
   }else if(item.DOC_TYPE_ID==3){
-    this.router.navigate(['/salary-transfer-cerificate']);
+    if(this.user=='team'){
+      this.router.navigate(['/salary-transfer-cerificate'], { queryParams: { user: this.user,Status:this.selectedStatus } });
+    } else{
+      this.router.navigate(['/salary-transfer-cerificate'], { queryParams: { user: this.user,Status:this.selectedStatusPersonal } });
+    }   
   }else{
-    this.router.navigate(['/employment-certificate']);
+    if(this.user=='team'){
+      this.router.navigate(['/employment-certificate'], { queryParams: { user: this.user,Status:this.selectedStatus } });
+    } else{
+      this.router.navigate(['/employment-certificate'], { queryParams: { user: this.user,Status:this.selectedStatusPersonal } });
+    }    
   }
   }
   ApproveSpecialCat(item:any){

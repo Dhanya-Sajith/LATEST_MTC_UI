@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiCallService } from 'src/app/api-call.service';
 import { LoginService } from 'src/app/login.service';
 import { GeneralService } from 'src/app/general.service';
+import { ActivatedRoute } from '@angular/router';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -20,10 +21,17 @@ export class SalaryCertificateComponent implements OnInit {
   experiencedata: any=[];
   //employmentdata: any=[];
   salarytransferdata:  any=[];
+  user: any;
+  Status: any;
 
-  constructor(private apicall:ApiCallService,private session:LoginService,private general:GeneralService) { }
+  constructor(private apicall:ApiCallService,private session:LoginService,private general:GeneralService,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.user = params['user'];
+      this.Status = params['Status'];    
+     
+    }); 
 
     this.hostname=this.apicall.dotnetapi; 
     this.apicall.genCompanyData(this.company).subscribe((res)=>{
@@ -36,6 +44,7 @@ export class SalaryCertificateComponent implements OnInit {
        //alert(JSON.stringify(this.salarytransferdata))
        this.apicall.Fetch_Salary_Cert_Template(this.empdata.empcode,this.empdata.reqid).subscribe((res)=>{
         this.salarytransferdata=res;
+        //alert(JSON.stringify(this.salarytransferdata))
     })   
 
   }
@@ -73,21 +82,26 @@ export class SalaryCertificateComponent implements OnInit {
   // }
   convertToPDF() {
     const element = document.getElementById('htmlElementId'); // Replace with your HTML element's ID
-
+  
     if (element) {
-        html2canvas(element, { scale: 2 }).then((canvas) => {
+        html2canvas(element, {
+            scale: 2, // Increase scale for better quality
+            useCORS: true // Use CORS to handle images from different origins
+        }).then((canvas) => {
             const contentDataURL = canvas.toDataURL('image/jpeg');
             const pdf = new jsPDF('portrait', 'mm', 'a4'); // Portrait, millimeters, A4 size
-
-            const imgWidth = 200;
+  
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth - 20; // Leave some margin
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-            const xPosition = (pdf.internal.pageSize.width - imgWidth) / 2; // Center horizontally
+  
+            const xPosition = 10; // Left margin
             const yPosition = 10; // Top margin
-
+  
             // Add the image to the PDF
             pdf.addImage(contentDataURL, 'JPEG', xPosition, yPosition, imgWidth, imgHeight);
-
+  
             // Save the PDF
             pdf.save('Salary Certificate.pdf');
         }).catch((error) => {
@@ -96,7 +110,6 @@ export class SalaryCertificateComponent implements OnInit {
     } else {
         console.error("Element with ID 'htmlElementId' not found");
     }
-}
-
+  }
 
 }

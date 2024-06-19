@@ -59,7 +59,7 @@ export class TrainingPlanComponent implements OnInit {
   fetchScheduledDtls: any;
   companycode: any;
 
-  selectedpurpose:any = -1;
+  selectedpurpose:any = 1;
   selectedskill:any = -1
   Trainingemployees: any;
   editSchedule: any;

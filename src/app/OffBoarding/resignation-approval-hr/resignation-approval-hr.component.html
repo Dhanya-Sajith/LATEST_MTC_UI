@@ -263,22 +263,22 @@
                                                             <i class="ri-search-line search-icon"></i>
                                                         </div>
                                                         <div>
-                                                            <select class="form-select font-type h-30 textbox-15 " [(ngModel)]="selectedCompanyidEOS" (change)="onCompanySelectedEOS(selectedCompanyidEOS)">
-                                                                <option value="-1" selected disabled >Select</option>
+                                                            <select class="form-select font-type h-30 textbox-15 " [(ngModel)]="Eoscompany">
+                                                                <option value="-1" selected disabled >Company</option>
                                                                 <option *ngFor="let combo of companydata" [value]="combo.KEY_ID">{{ combo.DATA_VALUE }}</option>
                                                             </select> 
                                                         </div>
                                                         <div>
-                                                            <select class="form-select font-type fs-12 textbox-15 h-30" [(ngModel)]="selectedStatusEOS"(change)="filter()">
+                                                            <select class="form-select font-type fs-12 textbox-15 h-30" [(ngModel)]="Eosstatus">
                                                                 <option value="-1" selected disabled>Status</option>
                                                                 <option *ngFor="let combo of status" value="{{combo.KEY_ID}}" [hidden]="combo.KEY_ID==6">{{combo.DATA_VALUE}}</option>                                                            
-                                                              </select>
+                                                              </select>  
                                                         </div>
                                                         <div>
-                                                            <select class="form-select font-type fs-12 textbox-15 h-30" [(ngModel)]="selectedYearEOS" (change)="filter()">
+                                                            <select class="form-select font-type fs-12 textbox-15 h-30" [(ngModel)]="Eosyear">
                                                                 <option value="-1" selected disabled>Year</option>
                                                                 <option *ngFor="let combo of yeardata" [value]="combo.DISPLAY_FIELD">{{ combo.DISPLAY_FIELD }}</option>
-                                                              </select>  
+                                                              </select>    
                                                         </div>
                                                     </div>
                                                 </div>
@@ -293,94 +293,131 @@
                                                         <th>Company</th>
                                                         <th>Employee</th>
                                                         <th class="text-center">Releaving <br> Type</th>
+                                                        <th class="text-center">Payment <br> Mode</th>
+                                                        <th class="text-center">Payment <br> Date</th>
                                                         <th class="text-center">Clearance <br> Status</th>
                                                         <th class="text-center" width="5%"> EOS <br/> Statement</th>
                                                         <th width="5%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all font-type fs-11">
-                                                <tr class="font-type">
-                                                        <td>1</td>
-                                                        <td>WM</td>
-                                                        <td>Vidhaan Hudda</td>
-                                                        <td>Resignation</td>
-                                                        <td></td>
-                                                        <td class="status"><span class="badge bg-info-subtle text-info width-budge fs-11 fw-semibold text-uppercase">Pending for Action</span></td>
-                                                        <td>  
-                                                            <ul class="list-inline hstack gap-2 mb-0">
-                                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="EOS Calculation">
-                                                                    <a href="#" class="text-blue d-inline-block">
-                                                                        <i class="ri-edit-box-fill fs-20"></i>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
-                                                </tr>
-                                                <tr class="font-type">
-                                                    <td>2</td>
-                                                    <td>FZE - HFZA - MH</td>
-                                                    <td>Dinesh Chandra</td>
-                                                    <td>Resignation</td>
+                                                <tr class="font-type" *ngFor="let eosdata of Eoslist;index as i">
+                                                    <td>{{i+1}}</td>
+                                                    <td>{{eosdata.COMPANY}}</td>
+                                                    <td>{{eosdata.EMP_NAME}}</td>
+                                                    <td>{{eosdata.RELIEVING_TYPE}}</td>
+                                                    <td>{{eosdata.PAYMENT_MODE}}</td>
+                                                    <td>{{eosdata.PAYDATE | date:'dd-MM-YYYY'}}</td>
                                                     <td>
-                                                            <h6 class="font-type fs-12 ma-10"><i class="ri-check-line me-1 align-middle text-success"></i><a href="#clearanceModal" data-bs-toggle="modal" class="text-primary d-inline-block text-success" style="text-decoration: underline;">IT Clearance</a></h6>
-                                                            <h6 class="font-type fs-12"><i class="ri-error-warning-line me-1 align-middle text-danger"></i><a href="#clearanceModal" data-bs-toggle="modal" style="text-decoration: underline;" class="text-danger">Admin Clearance</a></h6>
-                                                            <h6 class="font-type fs-12"><i class="ri-error-warning-line me-1 align-middle text-danger"></i><a href="#clearanceModal" data-bs-toggle="modal" style="text-decoration: underline;" class="text-danger">Finance Clearance</a></h6>
+                                                        <ng-container *ngFor="let listclearnce of eosdata.ClearenceModels">
+                                                            <h6 class="font-type fs-12 ma-10" *ngIf="listclearnce.CLEARANCE_FLAG == 1"><i class="ri-check-line me-1 align-middle text-success"></i>
+                                                                <a href="#clearanceModal" data-bs-toggle="modal" class="text-primary d-inline-block text-success" style="text-decoration: underline;" (click)="clearance(eosdata.EMP_CODE,listclearnce.CATEGORY_TYPE,listclearnce.CATEGORY_TYPE_VAL)">{{listclearnce.CATEGORY_TYPE_VAL}}</a>
+                                                            </h6>
+                                                            <h6 class="font-type fs-12" *ngIf="listclearnce.CLEARANCE_FLAG == 0"><i class="ri-error-warning-line me-1 align-middle text-danger"></i>
+                                                                <a href="#clearanceModal" data-bs-toggle="modal" style="text-decoration: underline;" class="text-danger" (click)="clearance(eosdata.EMP_CODE,listclearnce.CATEGORY_TYPE,listclearnce.CATEGORY_TYPE_VAL)">{{listclearnce.CATEGORY_TYPE_VAL}}</a>
+                                                            </h6>
+                                                        </ng-container>
                                                     </td>
-                                                    <td class="status"><span class="badge bg-info-subtle text-info  width-budge fs-11 fw-semibold text-uppercase">Pending for Approval</span></td>
-                                                    <td>
+                                                    <td class="status">
+                                                        <ng-container [ngSwitch]="true">
+                                                            <div *ngSwitchCase="eosdata.APPROVED_STATUS == '0' ||eosdata.APPROVED_STATUS == '2' || eosdata.APPROVED_STATUS == '4'" >
+                                                              <span class="badge bg-info-subtle text-info width-budge fs-11 fw-semibold text-uppercase">{{eosdata.STATUS_VAL}}</span>
+                                                            </div>
+                                                            <div *ngSwitchCase="eosdata.APPROVED_STATUS == '1' ||eosdata.APPROVED_STATUS == '5'" >
+                                                                <span class="badge bg-success-subtle text-success width-budge fs-11 fw-semibold text-uppercase">{{eosdata.STATUS_VAL}}</span>
+                                                            </div>
+                                                            <div *ngSwitchCase="eosdata.APPROVED_STATUS == '3'" >
+                                                                <span class="badge bg-danger-subtle text-danger width-budge fs-11 fw-semibold text-uppercase">{{eosdata.STATUS_VAL}}</span>
+                                                            </div>
+                                                        </ng-container>
+                                                    </td>
+                                                    <td>  
                                                         <ul class="list-inline hstack gap-2 mb-0">
-                                                            <li class="list-inline-item"  data-bs-trigger="hover" data-bs-placement="top" title="View EOS Statement">
-                                                                <a href="#"  class="text-primary d-inline-block text-orange">
+                                                            <!------HR------->
+                                                            <li  *ngIf="this.grpname.includes('HR') && this.desig == 54 && eosdata.APPROVED_STATUS == '1' || eosdata.APPROVED_STATUS == '3'" class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="EOS Calculation">
+                                                                <a [routerLink]="['/EOSStatement']" [queryParams]="{ reqid: eosdata.REQUEST_ID,code:eosdata.EMP_CODE,view:1}" class="text-blue d-inline-block">
+                                                                    <i class="ri-edit-box-fill fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <ng-container *ngFor="let listclearnce of eosdata.ClearenceModels">
+                                                                <ng-container *ngIf="listclearnce.CATEGORY_TYPE_VAL == 'IT Clearence' || listclearnce.CATEGORY_TYPE_VAL == 'IT Accounts Clearence'">
+                                                                    <ng-container *ngIf="listclearnce.CLEARANCE_FLAG == 1">
+                                                                        <li *ngIf="this.grpname.includes('HR') && this.desig == 54 && eosdata.APPROVED_STATUS == '0'" class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-toggle="modal" href="#SuccessRecordModal" (click)="EOSprocessing(eosdata.REQUEST_ID,eosdata.EMP_CODE)" data-bs-placement="top" title="process EOS">
+                                                                            <a class="text-blue d-inline-block" href="#">
+                                                                                <i class="ri-loop-left-line me-2 align-bottom text-success fs-14"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ng-container>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                            
+                                                            <!-- <li *ngIf="this.grpname.includes('HR') && this.desig == 54 && eosdata.APPROVED_STATUS == '3'" class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Reprocess EOS" >
+                                                                <a class="text-blue d-inline-block" href="#">
+                                                                    <i class="ri-restart-fill fs-20 text-blue"></i>
+                                                                </a>
+                                                            </li> -->
+                                                            <!------HR------->
+
+                                                            <!------AC------->
+
+                                                            <li *ngIf="this.grpname.includes('AC') && (eosdata.APPROVED_STATUS == '0')" class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Finace Clearence" (click)="ActiveId(eosdata.EMP_CODE,eosdata.REQUEST_ID)">
+                                                                <a href="#AccountclearenceModal" data-bs-toggle="modal" class="text-blue d-inline-block">
+                                                                    <i class="ri-edit-box-fill fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li *ngIf="this.grpname.includes('AC') && (eosdata.APPROVED_STATUS == '4')" class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Payment Release" (click)="ActiveId(eosdata.EMP_CODE,eosdata.REQUEST_ID)">
+                                                                <a href="#AccountupdatesModal" data-bs-toggle="modal" class="text-blue d-inline-block">
+                                                                    <i class="ri-edit-box-fill fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li  *ngIf="this.grpname.includes('AC') && (eosdata.APPROVED_STATUS > '2')" class="list-inline-item"  data-bs-trigger="hover" data-bs-placement="top" title="View EOS Statement">
+                                                                <a [routerLink]="['/EOSStatement']" [queryParams]="{ reqid: eosdata.REQUEST_ID,code:eosdata.EMP_CODE,view:0}" class="text-primary d-inline-block text-orange">
                                                                     <i class="ri-eye-fill text-orange fs-20"></i>
                                                                 </a>
                                                             </li>
+
+                                                            <!-- <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Finace Clearence" (click)="ActiveId(eosdata.EMP_CODE,eosdata.REQUEST_ID)">
+                                                                <a href="#AccountclearenceModal" data-bs-toggle="modal" class="text-blue d-inline-block">
+                                                                    <i class="ri-edit-box-fill fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Payment Release" (click)="ActiveId(eosdata.EMP_CODE,eosdata.REQUEST_ID)">
+                                                                <a href="#AccountupdatesModal" data-bs-toggle="modal" class="text-blue d-inline-block">
+                                                                    <i class="ri-edit-box-fill fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li  class="list-inline-item"  data-bs-trigger="hover" data-bs-placement="top" title="View EOS Statement">
+                                                                <a [routerLink]="['/EOSStatement']" [queryParams]="{ reqid: eosdata.REQUEST_ID,code:eosdata.EMP_CODE,view:0}" class="text-primary d-inline-block text-orange">
+                                                                    <i class="ri-eye-fill text-orange fs-20"></i>
+                                                                </a>
+                                                            </li> -->
+
+                                                            <!------AC------->
+
+                                                            <!------VP------->
+                                                            <li *ngIf="this.grpname.includes('VP') && (eosdata.APPROVED_STATUS == '2')" class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Approve" (click)="VPApprove(eosdata.REQUEST_ID,eosdata.EMP_CODE)">
+                                                                <a href="#SuccessRecordModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn text-success">
+                                                                   <i class="ri-checkbox-circle-fill fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li *ngIf="this.grpname.includes('VP') && (eosdata.APPROVED_STATUS == '2')" class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Reject" (click)="ActiveId(eosdata.EMP_CODE,eosdata.REQUEST_ID)">
+                                                                <a class="remove-item-btn text-danger" data-bs-toggle="modal" href="#EOSRejectModal">
+                                                                    <i class="ri-close-circle-fill fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li  *ngIf="this.grpname.includes('VP') && (eosdata.APPROVED_STATUS == '2')" class="list-inline-item"  data-bs-trigger="hover" data-bs-placement="top" title="View EOS Statement">
+                                                                <a [routerLink]="['/EOSStatement']" [queryParams]="{ reqid: eosdata.REQUEST_ID,code:eosdata.EMP_CODE,view:0}" class="text-primary d-inline-block text-orange">
+                                                                    <i class="ri-eye-fill text-orange fs-20"></i>
+                                                                </a>
+                                                            </li>
+                                                            <!------VP------->
                                                         </ul>
-                                                    </td>
-                                                </tr>
-                                                <tr class="font-type">
-                                                    <td>3</td>
-                                                    <td>FZE - JAFZA - MJ</td>
-                                                    <td>Swant Sharma</td>
-                                                    <td>Retirement</td>
-                                                    <td>
-                                                        <h6 class="font-type fs-12 ma-10"><i class="ri-check-line me-1 align-middle text-success"></i><a href="#clearanceModal" data-bs-toggle="modal" style="text-decoration: underline;" class="text-success">IT Clearance</a></h6>
-                                                    </td>
-                                                    <td class="status"><span class="badge bg-success-subtle text-success width-budge fs-11 fw-semibold text-uppercase">Approved</span></td>
-                                                    <td>    
-                                                        <ul class="list-inline hstack gap-2 mb-0">
-                                                            <li class="list-inline-item"  data-bs-trigger="hover" data-bs-placement="top" title="View EOS Statement">
-                                                                <a href="#" class="text-primary d-inline-block text-orange">
-                                                                    <i class="ri-eye-fill text-orange fs-20"></i>
-                                                                </a>
-                                                            </li>
-                                                         </ul>
-                                                    </td>
-                                                </tr>
-                                                <tr class="font-type">
-                                                    <td>3</td>
-                                                    <td>FZE - WV</td>
-                                                    <td>Ravikant Pandey</td>
-                                                    <td>Resignation</td>
-                                                    <td>
-                                                        <h6 class="font-type fs-12 ma-10"><i class="ri-check-line me-1 align-middle text-success"></i><a href="#clearanceModal" data-bs-toggle="modal"style="text-decoration: underline;" class="text-success">IT Clearance</a></h6>
-                                                        <h6 class="font-type fs-12"><i class="ri-check-line me-1 align-middle text-success"></i><a href="#clearanceModal" data-bs-toggle="modal" style="text-decoration: underline;" class="text-success">Admin Clearance</a></h6>
-                                                        <h6 class="font-type fs-12"><i class="ri-check-line me-1 align-middle text-success"></i><a href="#clearanceModal" data-bs-toggle="modal" style="text-decoration: underline;" class="text-success">Finance Clearance</a></h6>
-                                                    </td>
-                                                    <td class="status"><span class="badge bg-danger-subtle text-danger width-budge fs-11 fw-semibold text-uppercase">Rejected</span></td>
-                                                    <td>
-                                                            <ul class="list-inline hstack gap-2 mb-0">
-                                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Reprocess EOS Calculation">
-                                                                    <a class="text-blue d-inline-block" href="#">
-                                                                        <i class="ri-restart-fill fs-20 text-blue"></i>
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="row font-type mb-0">
+                                        <!-- <div class="row font-type mb-0">
                                             <div class="col-sm">
                                                <div class="dataTables_info fs-12 text-muted" id="scroll-horizontal_info" role="status" aria-live="polite">Showing 1 to 4 of 4 entries</div>
                                             </div>
@@ -394,11 +431,12 @@
                                                   </ul>
                                                </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         </div>
                                     </div>
                                     <!--END EOS STATEMENT TAB-->
-                                     <!--Cancel Request Model-->
+
+                    <!--Cancel Request Model-->
                     <div class="modal fade zoomIn" id="CancelModal" tabindex="-1" aria-labelledby="CancelModal" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -434,6 +472,117 @@
 
 
          <!-- MODAL BOXES-->
+
+                        <!--Account clearence Model-->
+                        <div class="modal fade zoomIn " id="AccountclearenceModal" tabindex="-1" aria-labelledby="AccountclearenceModal" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-orange padding-up-5">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                                    </div>
+                                    <form class="tablelist-form" autocomplete="off">
+                                        <div class="modal-body">
+                                            <input type="hidden" id="id-field" />
+                                            <div class="row mb-3">
+                                                <div class="col-lg-3">
+                                                    <!-- <h6 class="fs-12 font-type fw-semibold"><span>Employee</span></h6> -->
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <input type="checkbox" name="accclear" [(ngModel)]="accclear"> Accounts Clearance         
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-lg-3">
+                                                    <h6 class="fs-12 font-type fw-semibold">Remarks</h6>
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <textarea class="form-control textbox-15 font-type mb-2" required rows="3" name="clearence_remarks" [(ngModel)]="clearence_remarks"></textarea>  
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 pt-2">
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-orange" data-bs-toggle="modal" href="#SuccessRecordModal" (click)="Accountsclearence()">Submit</button>
+                                                    <button type="button" class="btn btn-blue" (click)="ClearAccountclearence()">Cancel</button>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> 
+                        <!--End Request Model-->
+
+                        <!--Account clearence Model-->
+                        <div class="modal fade zoomIn " id="AccountupdatesModal" tabindex="-1" aria-labelledby="AccountupdatesModal" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-orange padding-up-5">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                                    </div>
+                                    <form class="tablelist-form" autocomplete="off">
+                                        <div class="modal-body">
+                                            <input type="hidden" id="id-field" />
+                                            <div class="row mb-3">
+                                                <div class="col-lg-3">
+                                                    <h6 class="fs-12 font-type fw-semibold"><span>Payment Mode</span></h6>
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <select class="form-select font-type fs-12 textbox-15 h-30" [(ngModel)]="paymentmode" name="paymentmode">
+                                                        <option value="-1">Select</option>
+                                                        <option *ngFor="let lstatus of liststatus" value="{{lstatus.KEY_ID}}">
+                                                            {{lstatus.DATA_VALUE}}
+                                                        </option>
+                                                    </select>          
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-lg-3">
+                                                    <h6 class="fs-12 font-type fw-semibold">Payment Date</h6>
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <input type="date" name="paymentdt" class="form-control font-type" [(ngModel)]="paymentdt">  
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 pt-2">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-orange" data-bs-toggle="modal" href="#SuccessRecordModal" (click)="Accounts_Payment()">Submit</button>
+                                                    <button type="button" class="btn btn-blue" (click)="ClearPayment()">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> 
+                        <!--End Request Model-->
+
+                        <!-- Reject Model-->
+                        <div class="modal fade zoomIn" id="EOSRejectModal" tabindex="-1" aria-labelledby="EOSRejectModal" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-orange padding-up-5">
+                                        <button type="button" class="btn-close" id="deleteRecord-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
+                                    </div>
+                                    <form class="tablelist-form" autocomplete="off">
+                                        <div class="modal-body">
+                                            <input type="hidden" id="id-field" />
+                                            <div class="mb-3">
+                                                <label class="form-label font-type">Reason</label>
+                                                <textarea class="form-control" required rows="3" [(ngModel)]="EOSreason"></textarea>  
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer margin-up-15">
+                                            <div class="hstack gap-2">
+                            
+                                                <button class="btn btn-danger font-type" id="delete-record" data-bs-toggle="modal" href="#SuccessRecordModal" (click)="VPReject()">Reject</button>
+                                                <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                    </div>
+                    <!-- End Reject Model-->
 
                          <!--Add Request Model-->
                          <div class="modal fade zoomIn " id="AddRequestModal" tabindex="-1" aria-labelledby="AddRequestModal" aria-hidden="true">
@@ -582,29 +731,52 @@
                     <!--End Reason for Resignation Model-->
                     <button id="openModalButton" [hidden]="true" data-bs-toggle="modal" data-bs-target="#SuccessRecordModal">Open Modal</button> 
                     <!--Modal For Success Message Start-->
-                    <div class="modal fade zoomIn" id="SuccessRecordModal" tabindex="-1" aria-labelledby="deleteRecordLabel" aria-hidden="true" >
-                      <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                              <div class="modal-header bg-orange padding-up-5">
-                                  <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-                              </div>
-                              <div class="modal-body" *ngIf="showModal==1"> 
-                                  <div class="container">
-                                      <h2 class="text-center" style="font-size: 12px;"><i class="fa fa-check-circle text-success" style="font-size: 25px;" style="font-size: 12px;"></i> {{success}}</h2>
-                              
-                                  </div>
-                              </div>
-                              <div class="modal-body" *ngIf="showModal==2">
-                              <div class="container">
-                                  <h2 class="text-center" style="font-size: 12px;"><i class="fa fa-times-circle text-danger" style="font-size: 25px;" style="font-size: 12px;"></i> {{failed}}</h2>
-                                  
-                              </div>
-                          </div>
-                          </div>
-                      </div>
-                  </div>
-                  <!--Modal For Success Message End-->
+                    <div class="modal fade zoomIn" id="SuccessRecordModal" tabindex="-1" aria-labelledby="deleteRecordLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-orange padding-up-5">
+                                    <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                                </div>
+                                <div class="modal-body" *ngIf="showModal==1"> 
+                                    <div class="container">
+                                        <h2 class="text-center" style="font-size: 12px;"><i class="fa fa-check-circle text-success" style="font-size: 25px;" style="font-size: 12px;"></i> {{success}}</h2>
+                                
+                                    </div>
+                                </div>
+                                <div class="modal-body" *ngIf="showModal==2">
+                                    <div class="container">
+                                        <h2 class="text-center" style="font-size: 12px;"><i class="fa fa-times-circle text-danger" style="font-size: 25px;" style="font-size: 12px;"></i> {{failed}}</h2>
+                                        
+                                    </div>
+                                </div>
+                                <div class="modal-body" *ngIf="showModal==3">
+                                    <div class="container">
+                                        <h2 class="text-center" style="font-size: 12px;"><i class="fa fa-times-circle text-danger" style="font-size: 25px;" style="font-size: 12px;"></i> {{failed}}</h2>
+                                        
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>CHECK CATEGORY</th>
+                                                    <th>APPLICABLE DATE</th>
+                                                    <th>REMARKS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let row of fetchedData">
+                                                    <td>{{ row.CHECK_CATEGORY }}</td>
+                                                    <td>{{ row.APPLICABLE_DATE | date:'dd-MM-yyyy' }}</td>
+                                                    <td>{{ row.REMARKS }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal For Success Message End-->
 
                     <!-- Approved Modal-->
                     <div class="modal fade zoomIn" id="approvedModal" tabindex="-1" aria-labelledby="approvedModal" aria-hidden="true">
@@ -678,7 +850,7 @@
                     <app-footer></app-footer>
 
 
-        <!-- IT -Admin-Finance Clearance Modal -->
+            <!-- IT -Admin-Finance Clearance Modal -->
             <div class="modal fade zoomIn " id="clearanceModal" tabindex="-1" aria-labelledby="clearanceModal" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
@@ -694,9 +866,8 @@
                                             <div class="col-lg-3 pt-1">
                                                     <h6 class="font-type fw-semibold text-orange">Status :</h6>
                                             </div>
-                                            <div class="col-lg-9">
-                                                <h6 class="font-type fw-medium text-success text-uppercase"><i class="ri-checkbox-circle-fill text-success fs-18"></i>Clearance From <span>Admin</span></h6>
-                                                <!--<i class="ri-close-circle-fill fs-16 text-danger"></i> <span class="d-inline-block fs-12 align-middle text-black font-type ms-1">No Clearance from IT</span>-->
+                                            <div class="col-lg-9" *ngIf="RECORDID == 1">
+                                                <h6 class="font-type fw-medium text-success text-uppercase"><i class="ri-checkbox-circle-fill text-success fs-18"></i><span> {{selectedcategory}}</span></h6>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -704,10 +875,10 @@
                                                 <h6 class="font-type fw-semibold text-orange">Remarks :</h6>
                                             </div>
                                             <div class="col-lg-9">
-                                                <span class="d-inline-block fs-12 align-middle text-black font-type">Admin asset management is the process of ensuring an organization’s assets are accounted for, deployed, maintained, upgraded, and disposed of when the time comes. Put simply, it’s making sure that the valuable items, tangible and intangible, in your organization are tracked and being used.</span>
+                                                <span class="d-inline-block fs-12 align-middle text-black font-type">{{remark}}</span>
                                              </div>
                                         </div>
-                                        <div class="table-responsive table-card ma-10">
+                                        <div class="table-responsive table-card ma-10" [hidden] = "selectedcategory == 'Accounts Clearence'">
                                             <table class="table table-nowrap align-middle table-bordered border-dark table-hover">
                                                 <thead class="font-type">
                                                 <tr>
@@ -719,14 +890,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="list form-check-all font-type">
-                                                <tr class="h-30">
-                                                    <td class="fw-semibold">01</td>
-                                                    <td>Keyboard</td>
-                                                    <td>12/06/2020</td>
-                                                    <td class="status"><span class="badge bg-success-subtle text-success fs-11 w-100 text-uppercase">Returned</span></td>
-                                                    <td>January 25, 2024</td>                                              
+                                                <tr class="h-30" *ngFor="let clearancedata of clearancelist; let i = index">
+                                                    <td class="fw-semibold">{{i+1}}</td>
+                                                    <td>{{clearancedata.ASSET_NAME}}</td>
+                                                    <td>{{clearancedata.DATE_OF_ISSUE | date:'dd-MM-yyy'}}</td>
+                                                    <td class="status"><span class="badge bg-success-subtle text-success fs-11 w-100 text-uppercase">{{clearancedata.STATUS}}</span></td>
+                                                    <td>{{clearancedata.DATE_OF_RETURN | date:'M dd,yyy'}}</td>                                              
                                                 </tr>
-                                                <tr class="h-30">
+                                                <!-- <tr class="h-30">
                                                     <td class="fw-semibold">02</td>
                                                     <td>Laptops and computers</td>
                                                     <td>10/06/2020</td>
@@ -753,7 +924,7 @@
                                                     <td>03/08/2020</td>
                                                     <td class="status"><span class="badge bg-success-subtle text-success fs-11 w-100 text-uppercase">Returned</span></td>
                                                     <td>February 25, 2024</td>                                              
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                         </div> 
@@ -761,9 +932,8 @@
                                 </div>
                             </form>
                         </div>
-                </div>
-            </div> 
-        <!-- END IT -Admin-Finance Clearance Modal -->
+                    </div> 
+                <!-- END IT -Admin-Finance Clearance Modal -->
 
     </div>
     <!-- end main content-->

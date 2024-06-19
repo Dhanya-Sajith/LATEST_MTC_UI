@@ -2441,4 +2441,104 @@ fetch_Grievance_Report(empcode:any,reqstatus:any,year:any,company:any)
 {
   return this.http.get<any>(`${this.dotnetapi}/ReportDashboard/GrievanceLog_Report/${empcode}/${reqstatus}/${year}/${company}`);
 }
+//Complaints/Suggestions
+Add_Grievance_Request(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/EmployeeManagement/Add_Grievance_Request`,data);
+}
+FetchGrievance_RequestsList(empcode:any,reqstatus:any,viewflag:any,year:any,grpname:any)
+{
+  
+  return this.http.get<any>(`${this.dotnetapi}/EmployeeManagement/FetchGrievance_RequestsList/${empcode}/${reqstatus}/${viewflag}/${year}/${grpname}`);
+}
+Grievance_Review(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/EmployeeManagement/Grievance_Review`,data);
+}
+ResourceEmployeesComboData(dept:any,company:any,user:any,viewflag:any)
+{
+ 
+  return this.http.get<any>(`${this.dotnetapi}/MasterManagement/ResourceEmployeesComboData/${dept}/${company}/${user}/${viewflag}`);
+}
+
+//Eos
+Fetch_EOSProcessList(user:any,company:any,year:any,status:any)
+{
+  return this.http.get<number>(`${this.dotnetapi}/OffBoarding/Fetch_EOSProcessList/${user}/${company}/${year}/${status}`);
+}
+Add_AccountsClearance(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/OffBoarding/Add_AccountsClearance`,data);
+}
+EOS_Processing(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/OffBoarding/EOS_Processing`,data);
+}
+AddOrDeduct_EOSPayments(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/OffBoarding/AddOrDeduct_EOSPayments`,data);
+}
+FetchEOSDataofEmployee(empcode:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/OffBoarding/FetchEOSDataofEmployee/${empcode}`);
+}
+EOS_SalaryApprovalReject(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/OffBoarding/EOS_SalaryApprovalReject`,data);
+}
+FetchEOS_EmpSal_Details(empcode:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/OffBoarding/FetchEOS_EmpSal_Details/${empcode}`);
+}
+FetchEOS_AdditionDeduction_Details(empcode:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/OffBoarding/FetchEOS_AdditionDeduction_Details/${empcode}`);
+}
+EOS_DetailsEdit(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/OffBoarding/EOS_DetailsEdit`,data);
+}
+
+Fetch_ResgAcceptanceTemplate(empcode:any)
+{
+  return this.http.get<number>(`${this.dotnetapi}/OffBoarding/Fetch_ResgAcceptanceTemplate/${empcode}`);
+}
+Fetch_EmpDetails_ExitInterview(empcode:any,reqid:any)
+{
+  return this.http.get<number>(`${this.dotnetapi}/OffBoarding/Fetch_EmpDetails_ExitInterview/${empcode}/${reqid}`);
+}
+AddEmp_ExitInterviewForm(data:any)
+{
+  return this.http.post<any>(`${this.dotnetapi}/OffBoarding/AddEmp_ExitInterviewForm`,data);
+}
+View_ExitInterviewDetails(empcode:any)
+{
+  return this.http.get<number>(`${this.dotnetapi}/OffBoarding/View_ExitInterviewDetails/${empcode}`);
+}
+
+listOffboardingdtls(empcode:any,status:any, year:any, company:any, category:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/OffBoarding/Fetch_ITAdminClearanceList/${empcode}/${status}/${year}/${company}/${category}`);
+}
+
+
+fetchtraining_eos_rpt(company:any, fromdate:any, todate:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/Competency/EOS_Report/${company}/${fromdate}/${todate}`);
+}
+
+ListAssetsOffboardingaction(empcode:any, category:any, assetsts:any)
+{
+  return this.http.get<any>(`${this.dotnetapi}/OffBoarding/Fetch_EmpAssetDetails_ITAdmin/${empcode}/${category}/${assetsts}`);
+}
+
+
+addoffboardingActions(data:any)
+{
+  //alert(JSON.stringify(data))
+  return this.http.post<any>(`${this.dotnetapi}/OffBoarding/Add_AssetClearance_ITAdmin`,data);
+}
+
+
+
 }

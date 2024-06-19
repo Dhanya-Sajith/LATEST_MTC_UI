@@ -167,17 +167,13 @@
                                             </td>
                                             <td>
                                                 <ul class="list-inline hstack gap-2 mb-0">
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Approve">
-                                                        <a href="#SuccessRecordModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-                                                        <button type="button" class="btn btn-success btn-sm" id="buttonApprove" (click) = "approveData(teamdata.EMP_CODE,teamdata.REQ_ID,1)"><i class="fa fa-check-circle" aria-hidden="true" style="font-size: 18px;"></i></button>
-                                                        </a>
+                                                    <li class="list-inline-item text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Approve">
+                                                        <button type="button" class="btn btn-success btn-sm" id="buttonApprove" data-bs-toggle="modal" data-bs-target="#SuccessRecordModal" (click) = "approveData(teamdata.EMP_CODE,teamdata.REQ_ID,1)"  [disabled]="teamdata.APPLICATION_STATUS_VAL!='Pending for Approval'"><i class="fa fa-check-circle" aria-hidden="true" style="font-size: 18px;"></i></button>
                                                     </li>
                                                     
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Reject">
-                                                        <a class="remove-item-btn" data-bs-toggle="modal" href="#RejectModal">
-                                                        <button type="button" class="btn btn-danger btn-sm" id="buttonReject" (click) = "approveData(teamdata.EMP_CODE,teamdata.REQ_ID,2)"><i class="fa fa-times-circle-o" aria-hidden="true" style="font-size: 18px;"></i>
+                                                    <li class="list-inline-item remove-item-btn" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Reject">
+                                                        <button type="button" class="btn btn-danger btn-sm" id="buttonReject"  data-bs-toggle="modal" data-bs-target="#RejectModal" (click) = "approveData(teamdata.EMP_CODE,teamdata.REQ_ID,2)"  [disabled]="teamdata.APPLICATION_STATUS_VAL!='Pending for Approval'"><i class="fa fa-times-circle-o" aria-hidden="true" style="font-size: 18px;"></i>
                                                         </button>
-                                                        </a>
                                                     </li>
                                                 </ul>
                                             </td>
@@ -713,7 +709,7 @@
                                                         <thead class="table-light text-white font-type">
                                                         <tr>
                                                             <th>Passengers</th>
-                                                            <th>Age</th>
+                                                            <th>DOB</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="list form-check-all font-type fs-11">
@@ -751,7 +747,7 @@
                                                         <thead class="table-light text-white font-type">
                                                         <tr>
                                                             <th>Passengers</th>
-                                                            <th>Age</th>
+                                                            <th>DOB</th>
                                                             <th width="5%" *ngIf="showflag == 0">
                                                                 Action
                                                             </th>

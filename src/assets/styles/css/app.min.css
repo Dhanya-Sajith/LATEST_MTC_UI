@@ -18630,3 +18630,28 @@ text-transform: uppercase;
     padding-bottom: 6px;
     padding-top: 8px;
 }
+
+.div-middle {
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+  }
+  .text-italic{
+    font-style: italic;
+  }
+  .ma-20{
+    margin-top: 20px
+}
+.p-space{
+    margin-bottom: 3px;
+}
+.badge-height{
+    line-height: 15px;
+}
+.h-32{
+    line-height: 32px;
+}
+.ma-5{
+    margin-top: 5px
+}

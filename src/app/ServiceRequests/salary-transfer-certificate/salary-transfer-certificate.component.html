@@ -45,13 +45,13 @@
                                     <div class="row gy-3" style="border-bottom: 3px ;">
                                         <!-- <img src={{hostname}}{{this.companyData[0].DATA_VALUE}} alt="" class="img-size"> -->
                                         <div class="avatar-title-lg p-1" *ngIf="this.companydata[0].COMPANY_ID=='Worldwide Oilfield Machine Middle East' || this.companydata[0].COMPANY_ID=='Worldwide Oilfield Machine Sales and Marketing Ltd' ">
-                                            <img src="assets\styles\img\WOM Logo - 2024.png" alt="" class="img-size-cert">
+                                            <img src="assets\styles\img\WOM Logo - 2024.png" alt="" class="img-size">
                                         </div>
                                         <div class="avatar-title-lg p-1" *ngIf="this.companydata[0].COMPANY_ID=='WOM Valves & Controls International FZE' ">
-                                            <img src="assets\styles\img\WVC-LOGO-2024.png" alt="" class="img-size-cert">
+                                            <img src="assets\styles\img\WVC-LOGO-2024.png" alt="" class="img-size">
                                         </div>
                                         <div class="avatar-title-lg p-1" *ngIf="this.companydata[0].COMPANY_ID=='Magnum Technology Center FZE' ">
-                                            <img src="assets\styles\img\MTC logo.png" alt="" class="img-size-cert">
+                                            <img src="assets\styles\img\MTC logo.png" alt="" class="img-size">
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@
 
                 <div class="col-lg-12 mb-3">
                     <div class="hstack gap-1 justify-content-end">
-                        <a href="javascript:history.back()">
+                        <a [routerLink]="['/documentRequest']" [queryParams]="{ user: this.user,Status:this.Status}">
                         <button type="button" class="btn btn-orange btn-label right ms-auto nexttab nexttab font-type text-white"><i class="ri-arrow-go-back-line label-icon align-middle fs-16 ms-2"></i>Back</button>
                         </a>
                     </div>

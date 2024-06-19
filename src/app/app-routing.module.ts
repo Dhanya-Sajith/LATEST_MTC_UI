@@ -124,6 +124,13 @@ import { SalaryCertificateComponent } from './ServiceRequests/salary-certificate
 import { SalaryTransferCertificateComponent } from './ServiceRequests/salary-transfer-certificate/salary-transfer-certificate.component';
 import { FamilyAirticketComponent } from './ServiceRequests/family-airticket/family-airticket.component';
 import { GrievanceLogReportComponent } from './reports/grievance-log-report/grievance-log-report.component';
+import { ComplaintsComponent } from './ServiceRequests/complaints/complaints.component';
+import { EOSStatementComponent } from './OffBoarding/eosstatement/eosstatement.component';
+import { EOSDocumentComponent } from './OffBoarding/eosdocument/eosdocument.component';
+import { ResignationAcceptanceLetterComponent } from './OffBoarding/resignation-acceptance-letter/resignation-acceptance-letter.component';
+import { ExitinterviewformComponent } from './OffBoarding/exitinterviewform/exitinterviewform.component';
+import { EmployeeOffboardingComponent } from './competency/employee-offboarding/employee-offboarding.component';
+import { EmployeeOffboardingActionComponent } from './competency/employee-offboarding-action/employee-offboarding-action.component';
 
 
 
@@ -257,6 +264,16 @@ const routes: Routes = [
   {path:'salary-cerificate' , component: SalaryCertificateComponent},
   {path:'family_airticket', component:FamilyAirticketComponent},
   {path:'grievance-log-report' , component:GrievanceLogReportComponent},
+  {path:'Complaints' , component:ComplaintsComponent},
+  {path:'EOSStatement',component:EOSStatementComponent},
+  {path:'EOSDocument',component:EOSDocumentComponent},
+  {path:'resignation_acceptance_letter', component:ResignationAcceptanceLetterComponent},
+  {path:'exitinterviewform',component:ExitinterviewformComponent},
+  {path:'EmployeeOffboarding' , component:EmployeeOffboardingComponent},
+  {path:'EmployeeOffboardingAction' , component:EmployeeOffboardingActionComponent},
+
+
+
 ];
 
 @NgModule({
